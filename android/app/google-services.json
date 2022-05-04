@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "560651167549",
+    "project_id": "med-project-c6e5f",
+    "storage_bucket": "med-project-c6e5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560651167549:android:7abafff5ad16fa90938754",
+        "android_client_info": {
+          "package_name": "com.medical.medcaremainapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560651167549-0fs2ph7pmdqk1bd69e89tbllvk72na1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADwjnThJD1T_s4OFg6Awm1CCv_T1m4P98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560651167549-0fs2ph7pmdqk1bd69e89tbllvk72na1c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "560651167549-i4jhtfanrl8hm9439mfls2b5m3rqdhuu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.medical.medcaremainapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
