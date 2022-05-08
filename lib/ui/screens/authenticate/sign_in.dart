@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medcaremainapp/models/user.dart';
-import 'package:medcaremainapp/services_and_managers/managers/user_database_manager.dart';
 import 'package:medcaremainapp/services_and_managers/notifiers/auth_notitfier.dart';
 import 'package:medcaremainapp/ui/screens/home_page.dart';
+import 'package:medcaremainapp/utils/routes.dart';
+
+import '../../../services_and_managers/managers/database_manager.dart';
+import '../../../utils/constants.dart';
 
 class SignInWidget extends StatefulWidget {
   const SignInWidget({Key? key}) : super(key: key);
@@ -15,55 +18,54 @@ class SignInWidget extends StatefulWidget {
 class _SignInWidgetState extends State<SignInWidget> {
   final AuthNotifier _authNotifier = AuthNotifier(false);
   final _controller = TextEditingController();
-  final _userDBManager = UserDatabaseManager();
-
+  final _databaseManager = DatabaseManager();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign In"),
-      ),
-      body: Center(
+    if(isLoading) {
+      return const CircularProgressIndicator(
+        backgroundColor: Colors.green,
+      );
+    }
+
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 30.0),
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () async {
-                dynamic res = await _authNotifier.signInWithPhone("+918988792178");
-                if(res) {
-                  Navigator.pushReplacementNamed(context, "/home");
-                }
-              },
-              child: const Text("Sign In"),
+            const SizedBox(height: 10.0,),
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: Constants.formHintName,
+              )
             ),
+            const SizedBox(height: 10.0,),
             TextFormField(
               controller: _controller,
+              decoration: const InputDecoration(
+                hintText: Constants.formHintPhone,
+              )
             ),
+            const SizedBox(height: 20.0,),
             ElevatedButton(
-                onPressed: () async {
-                  //getting firebase user
-                  User? signedUser =
-                      await _authNotifier.verifyOTP(_controller.text);
+              onPressed: () async {
+                setState(() {
+                  isLoading = true;
+                });
+                dynamic res = await _authNotifier.signInWithPhone("+91"+ _controller.text);
+                setState(() {
+                  isLoading = false;
+                });
+                if(res) {
+                  // print(res);
+                  Navigator.pushReplacementNamed(context, Routes.homeRoute);
+                } else {
+                  //No account exists
+                }
+              }, child: const Text("Sign In"))
 
-                  //after successful sign in, create a record in database
-                  if (signedUser != null) {
-                    _createUserRecordInDatabase(signedUser);
-                    Navigator.pushReplacementNamed(context, "/home");
-                  }
-                },
-                child: const Text("Verify")),
           ],
         ),
-      ),
-    );
+      );
   }
 
-  void _createUserRecordInDatabase(User? user) {
-    AppUser appUser = AppUser(
-        name: user?.displayName,
-        uid: user?.uid,
-        email: user?.email,
-        phoneNumber: user?.phoneNumber);
-
-    _userDBManager.updateUser(appUser);
-  }
 }
